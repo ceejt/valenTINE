@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# Database
+*.sqlite
+*.sqlite-journal
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Testing
+coverage/
+.phpunit.cache
+.phpunit.result.cache
+
+# Laravel specific
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+bootstrap/cache/
+public/storage
+public/hot
+
+# Composer
+composer.lock
+composer.phar
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
