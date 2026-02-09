@@ -1,11 +1,11 @@
-# Valentine's Proposal Website
+# Valentine's Proposal SPA
 
 A romantic, interactive proposal app with envelope opening animation, puzzle game, and choice tracking.
 
 ## Tech Stack
 
 - **Backend**: Laravel 11
-- **Frontend**: Vue 3 (Composition API) + Tailwind CSS
+- **Frontend**: Nuxt 3 (Vue 3 Composition API) + Tailwind CSS
 - **Database**: SQLite (for simplicity)
 
 ## Project Structure
@@ -23,16 +23,20 @@ valentine-proposal/
 │   ├── routes/
 │   │   └── api.php
 │   └── ...
-├── frontend/             # Vue 3 SPA
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── EnvelopeOpen.vue
-│   │   │   ├── PuzzleGame.vue
-│   │   │   └── FinalChoice.vue
-│   │   ├── App.vue
-│   │   └── main.js
-│   ├── public/
-│   └── package.json
+├── frontend/             # Nuxt 3 SPA
+│   ├── components/
+│   │   ├── EnvelopeOpen.vue
+│   │   ├── PuzzleGame.vue
+│   │   └── FinalChoice.vue
+│   ├── pages/
+│   │   └── index.vue
+│   ├── assets/
+│   │   └── css/
+│   │       └── main.css
+│   ├── app.vue
+│   ├── nuxt.config.ts
+│   ├── package.json
+│   └── tailwind.config.js
 └── README.md
 ```
 
@@ -61,7 +65,7 @@ php artisan serve  # Runs on http://localhost:8000
 ```bash
 cd frontend
 npm install
-npm run dev  # Runs on http://localhost:5173
+npm run dev  # Runs on http://localhost:3000
 ```
 
 ## Features
@@ -74,5 +78,6 @@ npm run dev  # Runs on http://localhost:5173
 ## Development Notes
 
 - API endpoint: `POST /api/proposal/choice`
-- CORS configured for localhost:5173
+- CORS configured for localhost:3000 (Nuxt default)
 - Uses SQLite for easy setup (no MySQL required)
+- Nuxt uses file-based routing in `/pages` directory
