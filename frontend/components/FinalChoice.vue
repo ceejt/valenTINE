@@ -5,7 +5,9 @@
       <h1 class="text-5xl font-bold text-rose-900 mb-4">
         To my Tine babyyy, will you be my valenTINE? 🥹💐
       </h1>
-      <p class="text-xl text-rose-700">Choose wisely... 😊</p>
+      <p class="text-xl text-rose-700">
+        don't choose tomato pls it doesn't work!!!!
+      </p>
     </div>
 
     <!-- Emoji Input -->
