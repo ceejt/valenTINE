@@ -21,12 +21,22 @@
             @click="selectRestaurant(restaurant)"
             class="p-6 border-3 border-rose-300 rounded-xl hover:border-rose-500 hover:bg-rose-50 transition-all transform hover:scale-105 active:scale-95"
           >
-            <div class="text-3xl mb-2">{{ restaurant.emoji }}</div>
+            <img
+              :src="restaurant.image"
+              :alt="restaurant.name"
+              class="w-24 h-24 object-cover rounded-full mx-auto mb-2 border-2 border-rose-300"
+            />
             <div class="font-bold text-lg text-rose-900">
               {{ restaurant.name }}
             </div>
             <div class="text-sm text-rose-600">{{ restaurant.tagline }}</div>
           </button>
+        </div>
+        <div
+          v-if="infoMessage"
+          class="mb-4 text-lg text-rose-700 font-semibold animate-pulse"
+        >
+          {{ infoMessage }}
         </div>
 
         <!-- Selected Restaurant Display -->
@@ -141,36 +151,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 
 const emit = defineEmits(["reservation-confirmed"]);
 
-// Fake restaurants that all lead to Pat & Pat
 const fakeRestaurants = ref([
   {
     id: 1,
     name: "Wildflour QC",
-    emoji: "🍴",
+    image: new URL("../assets/restaurants/wildflour.jpg", import.meta.url).href,
     tagline: "Elegant dining experience (FULLY-BOOKED!)",
     actualRestaurant: "Pat & Pat",
   },
   {
     id: 2,
     name: "Caffe Allor Ristorante",
-    emoji: "🌳",
+    image: new URL("../assets/restaurants/allor.jpg", import.meta.url).href,
     tagline: "Unique, aesthethic, IG-worthy. (FULLY-BOOKED!)",
     actualRestaurant: "Pat & Pat",
   },
   {
     id: 3,
     name: "Sable",
-    emoji: "💚☕️",
+    image: new URL("../assets/restaurants/sable.jpg", import.meta.url).href,
     tagline: "2-storey, unique cafe (Minimal dining options)",
+    actualRestaurant: "Pat & Pat",
+  },
+  {
+    id: 4,
+    name: "Pat & Pat",
+    image: new URL("../assets/restaurants/patpat.jpg", import.meta.url).href,
+    tagline: "Tagaytay-like experience in QC!",
     actualRestaurant: "Pat & Pat",
   },
 ]);
 
 const selectedRestaurant = ref(null);
+const infoMessage = ref("");
 const showSignature = ref(false);
 const isConfirmed = ref(false);
 
@@ -186,31 +203,47 @@ onMounted(() => {
     const canvas = signatureCanvas.value;
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    ctx.strokeStyle = "#be123c";
+    ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
   }
 });
 
 const selectRestaurant = (restaurant) => {
-  // No matter which one they click, it's always Pat & Pat! 😄
-  selectedRestaurant.value = {
-    name: "Pat & Pat Restaurant",
-    address:
-      "Capitol Greenstreet, Capitol Hills Dr, Pansol, Quezon City, 1119 Metro Manila",
-    emoji: "🍽️",
-  };
-
-  // Add a little surprise message
-  setTimeout(() => {
-    console.log(
-      `You thought you picked ${restaurant.name}, but surprise! It's Pat & Pat! 😊`,
-    );
-  }, 500);
+  infoMessage.value = "";
+  if (restaurant.name === "Pat & Pat") {
+    selectedRestaurant.value = {
+      name: "Pat & Pat Restaurant",
+      address:
+        "Capitol Greenstreet, Capitol Hills Dr, Pansol, Quezon City, 1119 Metro Manila",
+      image: new URL("../assets/restaurants/patpat.jpg", import.meta.url).href,
+    };
+  } else if (restaurant.name === "Sable") {
+    infoMessage.value =
+      "Sable is a great place for coffee and snacks, but not ideal for dinner/date nights. Still, a solid choice for a cozy cafe!";
+    selectedRestaurant.value = null;
+  } else {
+    infoMessage.value = `${restaurant.name} is fully-booked for Valentine's! Please choose another restaurant.`;
+    selectedRestaurant.value = null;
+  }
 };
 
-const proceedToSignature = () => {
+const proceedToSignature = async () => {
   showSignature.value = true;
+
+  await nextTick();
+  if (signatureCanvas.value) {
+    ctx = signatureCanvas.value.getContext("2d");
+    const canvas = signatureCanvas.value;
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+  }
 };
 
 // Signature drawing functions
@@ -236,6 +269,7 @@ const startDrawing = (e) => {
   const coords = getCoordinates(e);
   ctx.beginPath();
   ctx.moveTo(coords.x, coords.y);
+  ctx.strokeStyle = "#000000";
 };
 
 const draw = (e) => {
@@ -246,6 +280,7 @@ const draw = (e) => {
   const coords = getCoordinates(e);
   ctx.lineTo(coords.x, coords.y);
   ctx.stroke();
+  ctx.strokeStyle = "#000000";
 };
 
 const stopDrawing = () => {
@@ -255,6 +290,7 @@ const stopDrawing = () => {
 const clearSignature = () => {
   const canvas = signatureCanvas.value;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#000000";
   hasSignature.value = false;
 };
 
