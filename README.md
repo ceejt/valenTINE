@@ -38,6 +38,24 @@ valentine-proposal/
 │   ├── package.json
 │   └── tailwind.config.js
 └── README.md
+
+backend/
+├── app/Http/Controllers/ProposalController.php
+├── app/Models/ProposalChoice.php
+├── bootstrap/app.php                    ← CORS middleware
+├── config/cors.php                      ← CORS settings
+├── routes/api.php
+├── database/migrations/2024_02_01_000001_create_proposal_choices_table.php
+├── database/database.sqlite             ← CREATE THIS!
+├── .env                                 ← CREATE THIS!
+└── composer.json
+
+frontend/
+├── components/ (EnvelopeOpen.vue, PuzzleGame.vue, FinalChoice.vue)
+├── pages/index.vue
+├── app.vue
+├── nuxt.config.ts
+└── .env
 ```
 
 ## Setup Instructions
