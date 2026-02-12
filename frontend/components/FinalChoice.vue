@@ -47,7 +47,7 @@
         @click="resetChoice"
         class="bg-rose-500 hover:bg-rose-600 text-white font-bold text-2xl px-8 py-4 rounded-xl shadow-lg transform transition-all hover:scale-105"
       >
-        Try Again? 🔄
+        Try Again?
       </button>
     </div>
   </div>

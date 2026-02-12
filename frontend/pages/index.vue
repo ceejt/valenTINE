@@ -35,16 +35,18 @@ const handleChoice = (choice) => {
   console.log("User chose:", choice);
 
   // Only show restaurant booking if YES
-  if (choice === "yes") {
-    setTimeout(() => {
-      currentStep.value = "restaurant";
-    }, 3000); // Wait 3 seconds after confetti
+  if (choice === "yes" || choice === "🧸") {
+    {
+      setTimeout(() => {
+        currentStep.value = "restaurant";
+      }, 3000); // Wait 3 seconds after confetti
+    }
   }
-};
 
-// Handle restaurant reservation confirmation
-const handleReservation = (reservationData) => {
-  console.log("Reservation confirmed:", reservationData);
-  // Could send to backend API here if needed
+  // Handle restaurant reservation confirmation
+  const handleReservation = (reservationData) => {
+    console.log("Reservation confirmed:", reservationData);
+    // Could send to backend API here if needed
+  };
 };
 </script>
