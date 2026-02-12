@@ -16,9 +16,9 @@
 
 <script setup>
 import { ref } from "vue";
-import EnvelopeOpen from "./components/EnvelopeOpen.vue";
-import PuzzleGame from "./components/PuzzleGame.vue";
-import FinalChoice from "./components/FinalChoice.vue";
+import EnvelopeOpen from "~/components/EnvelopeOpen.vue";
+import PuzzleGame from "~/components/PuzzleGame.vue";
+import FinalChoice from "~/components/FinalChoice.vue";
 
 // Track current step in the flow
 const currentStep = ref("envelope"); // 'envelope' | 'puzzle' | 'choice'
