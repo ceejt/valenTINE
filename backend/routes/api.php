@@ -7,6 +7,7 @@ use App\Http\Controllers\ProposalController;
 // Proposal routes
 Route::prefix('proposal')->group(function () {
     Route::post('/choice', [ProposalController::class, 'storeChoice']);
+    Route::post('/reservation', [ProposalController::class, 'storeReservation']);
     Route::get('/choices', [ProposalController::class, 'getChoices']);
 });
 

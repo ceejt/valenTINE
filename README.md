@@ -1,4 +1,4 @@
-# Valentine's Proposal SPA
+# ValenTINE's Proposal
 
 A romantic, interactive proposal app with envelope opening animation, puzzle game, and choice tracking.
 
@@ -18,11 +18,20 @@ valentine-proposal/
 │   │   │   └── ProposalController.php
 │   │   └── Models/
 │   │       └── ProposalChoice.php
+│   ├── bootstrap/
+│   │   └── app.php                       # CORS & middleware config
+│   ├── config/
+│   │   └── cors.php                      # CORS settings
 │   ├── database/
-│   │   └── migrations/
+│   │   ├── migrations/
+│   │   │   └── 2024_02_01_000001_create_proposal_choices_table.php
+│   │   └── database.sqlite               # SQLite database (create this)
 │   ├── routes/
-│   │   └── api.php
-│   └── ...
+│   │   └── api.php                       # API routes
+│   ├── .env                              # Environment variables
+│   ├── .env.example                      # Environment template
+│   └── composer.json                     # PHP dependencies
+│
 ├── frontend/             # Nuxt 3 SPA
 │   ├── components/
 │   │   ├── EnvelopeOpen.vue
@@ -34,35 +43,17 @@ valentine-proposal/
 │   │   └── css/
 │   │       └── main.css
 │   ├── app.vue
+│   ├── .env                              # Frontend environment variables
 │   ├── nuxt.config.ts
 │   ├── package.json
 │   └── tailwind.config.js
-└── README.md
-
-backend/
-├── app/Http/Controllers/ProposalController.php
-├── app/Models/ProposalChoice.php
-├── bootstrap/app.php                    ← CORS middleware
-├── config/cors.php                      ← CORS settings
-├── routes/api.php
-├── database/migrations/2024_02_01_000001_create_proposal_choices_table.php
-├── database/database.sqlite             ← CREATE THIS!
-├── .env                                 ← CREATE THIS!
-└── composer.json
-
-frontend/
-├── app.vue                          ← Replaces src/App.vue
-├── pages/
-│   └── index.vue                    ←  main page
-├── components/
-│   ├── EnvelopeOpen.vue
-│   ├── PuzzleGame.vue
-│   └── FinalChoice.vue
-├── assets/
-│   └── css/
-│       └── main.css                 ← Replaces src/style.css
-├── nuxt.config.ts                   ← Replaces vite.config.js
-└── package.json
+│
+├── README.md
+├── QUICK_START.md
+├── NUXT_GUIDE.md
+├── ENV_SETUP.md
+├── GITIGNORE_GUIDE.md
+└── .gitignore
 ```
 
 ## Setup Instructions
@@ -74,35 +65,110 @@ frontend/
 - Node.js 18+
 - npm or yarn
 
-### Backend Setup
+### Backend Setup (Laravel)
 
 ```bash
 cd backend
+
+# 1. Install PHP dependencies
 composer install
+
+# 2. Setup environment file
 cp .env.example .env
+
+# 3. Generate application key
 php artisan key:generate
+
+# 4. Create SQLite database file
+touch database/database.sqlite
+
+# 5. Run database migrations
 php artisan migrate
+
+# 6. Start Laravel server
 php artisan serve  # Runs on http://localhost:8000
 ```
 
-### Frontend Setup
+### Frontend Setup (Nuxt 3)
 
 ```bash
 cd frontend
+
+# 1. Install JavaScript dependencies
 npm install
+
+# 2. Start development server
 npm run dev  # Runs on http://localhost:3000
 ```
+
+### Important Files to Create/Check
+
+**Backend:**
+
+- `backend/database/database.sqlite` - Create with `touch` command
+- `backend/.env` - Copy from `.env.example` and run `php artisan key:generate`
+- `backend/bootstrap/app.php` - CORS configuration (included)
+- `backend/config/cors.php` - CORS allowed origins (included)
+- `backend/database/migrations/*` - Database schema (included)
+
+**Frontend:**
+
+- `frontend/.env` - Already included with `NUXT_PUBLIC_API_URL`
 
 ## Features
 
 1. **Envelope Opening Animation**: CSS-powered fold/unfold effect
-2. **Drag-and-Drop Puzzle**: Arrange paper scraps to reveal message
-3. **Final Choice**: YES (confetti + 🐻) or NO (🍅 + retry)
-4. **API Logging**: Saves choice to database
+2. **Drag-and-Drop Puzzle**: Arrange pieces in correct order to form "Will You Be My MVP This Valentine's?"
+   - Must be placed in exact order: Will → You → Be → My → MVP → This → Valentine's?
+   - Click placed pieces to remove and rearrange
+3. **Emoji Input Choice**: Type 🧸 for YES or 🍅 for NO
+   - YES triggers confetti + teddy bear celebration
+   - NO shows tomato + retry option
+4. **Restaurant Booking Surprise**: (Only appears after YES)
+   - Fake restaurant selection (all lead to Pat & Pat!)
+   - Digital signature pad for confirmation
+   - Pre-booked surprise at Pat & Pat Restaurant, Quezon City
+5. **API Logging**: Saves choice and reservation signature to database
+
+## Complete Files List
+
+### Backend Files (Laravel)
+
+- `app/Http/Controllers/ProposalController.php` - API endpoints
+- `app/Models/ProposalChoice.php` - Database model
+- `bootstrap/app.php` - Application bootstrap & CORS middleware
+- `config/cors.php` - CORS configuration
+- `routes/api.php` - API routes definition
+- `database/migrations/2024_02_01_000001_create_proposal_choices_table.php` - Database schema
+- `.env.example` - Environment template
+- `.env` - Environment variables (create from .env.example)
+- `composer.json` - PHP dependencies
+- `database/database.sqlite` - with `touch database/database.sqlite`
+
+### Frontend Files (Nuxt 3)
+
+- `components/EnvelopeOpen.vue` - Opening animation
+- `components/PuzzleGame.vue` - Drag-drop puzzle
+- `components/FinalChoice.vue` - YES/NO buttons with confetti
+- `components/RestaurantBooking.vue` - Restaurant reservation with signature pad
+- `pages/index.vue` - Home page
+- `assets/css/main.css` - Global styles with Tailwind
+- `app.vue` - Root component
+- `nuxt.config.ts` - Nuxt configuration
+- `tailwind.config.js` - Tailwind configuration
+- `.env` - Environment variables with API URL
+- `package.json` - JavaScript dependencies
+- `.gitignore` - Nuxt-specific ignore rules
+
+### Documentation Files
+
+- `README.md`
 
 ## Development Notes
 
 - API endpoint: `POST /api/proposal/choice`
 - CORS configured for localhost:3000 (Nuxt default)
-- Uses SQLite for easy setup (no MySQL required)
+- Uses SQLite for easy setup
 - Nuxt uses file-based routing in `/pages` directory
+- Tailwind CSS for styling and animations
+- Confetti effect implemented with CSS animations

@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Validator;
 class ProposalController extends Controller
 {
     /**
-     * 
+     * Store (YES or NO)
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function storeChoice(Request $request)
     {
-        // validate
+        // Validate incoming data
         $validator = Validator::make($request->all(), [
             'choice' => 'required|in:yes,no'
         ]);
@@ -29,7 +29,7 @@ class ProposalController extends Controller
             ], 422);
         }
 
-        // save choice
+        // Save choice to database
         $choice = ProposalChoice::create([
             'choice' => $request->choice,
             'ip_address' => $request->ip(),
@@ -47,7 +47,42 @@ class ProposalController extends Controller
     }
 
     /**
-     *
+     * Store restaurant reservation confirmation
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeReservation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'restaurant' => 'required|string',
+            'location' => 'required|string',
+            'signature' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid reservation data',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Here you could save to database or send notification
+        // For now, just return success
+        return response()->json([
+            'success' => true,
+            'message' => 'Reservation confirmed!',
+            'data' => [
+                'restaurant' => $request->restaurant,
+                'location' => $request->location,
+                'timestamp' => now()
+            ]
+        ], 201);
+    }
+
+    /**
+     * Get all choices (for proposer to view)
      * 
      * @return \Illuminate\Http\JsonResponse
      */
