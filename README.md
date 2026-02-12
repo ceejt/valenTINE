@@ -51,11 +51,18 @@ backend/
 └── composer.json
 
 frontend/
-├── components/ (EnvelopeOpen.vue, PuzzleGame.vue, FinalChoice.vue)
-├── pages/index.vue
-├── app.vue
-├── nuxt.config.ts
-└── .env
+├── app.vue                          ← Replaces src/App.vue
+├── pages/
+│   └── index.vue                    ←  main page
+├── components/
+│   ├── EnvelopeOpen.vue
+│   ├── PuzzleGame.vue
+│   └── FinalChoice.vue
+├── assets/
+│   └── css/
+│       └── main.css                 ← Replaces src/style.css
+├── nuxt.config.ts                   ← Replaces vite.config.js
+└── package.json
 ```
 
 ## Setup Instructions
