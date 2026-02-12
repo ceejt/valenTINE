@@ -1,3 +1,7 @@
+# Nuxt build artifacts
+.nuxt/
+.output/
+
 # Logs
 logs
 *.log
