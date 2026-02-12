@@ -1,8 +1,11 @@
 <template>
   <div class="max-w-4xl w-full">
-    <h2 class="text-center text-2xl font-bold text-rose-900 mb-8">
-      Arrange the pieces to reveal the message! 
+    <h2 class="text-center text-2xl font-bold text-rose-900 mb-4">
+      Arrange the pieces in the correct order!
     </h2>
+    <p class="text-center text-sm text-rose-700 mb-6">
+      Drag pieces to the box above. Click placed pieces to remove them.
+    </p>
 
     <!-- Drop Zone -->
     <div
@@ -17,8 +20,10 @@
         <div
           v-for="piece in placedPieces"
           :key="piece.id"
-          class="bg-paper-dark px-6 py-4 shadow-lg border-2 border-rose-200 torn-edge paper-texture"
+          @click="removePiece(piece)"
+          class="bg-paper-dark px-6 py-4 shadow-lg border-2 border-rose-200 torn-edge paper-texture cursor-pointer hover:border-rose-400 transition-colors"
           :style="{ transform: `rotate(${piece.rotation}deg)` }"
+          title="Click to remove"
         >
           <span class="text-3xl font-bold text-rose-800">{{ piece.text }}</span>
         </div>
@@ -53,17 +58,17 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
-
 const emit = defineEmits(["solved"]);
 
-// Puzzle pieces
+// Puzzle pieces with correct order
 const pieces = ref([
-  { id: 1, text: "Will", rotation: -5, placed: false },
-  { id: 2, text: "You", rotation: 3, placed: false },
-  { id: 3, text: "Be", rotation: -2, placed: false },
-  { id: 4, text: "My", rotation: 4, placed: false },
-  { id: 5, text: "MVP?", rotation: -3, placed: false },
+  { id: 1, text: "Will", rotation: -5, placed: false, correctOrder: 0 },
+  { id: 2, text: "You", rotation: 3, placed: false, correctOrder: 1 },
+  { id: 3, text: "Be", rotation: -2, placed: false, correctOrder: 2 },
+  { id: 4, text: "My", rotation: 4, placed: false, correctOrder: 3 },
+  { id: 5, text: "MVP", rotation: -3, placed: false, correctOrder: 4 },
+  { id: 6, text: "This", rotation: 2, placed: false, correctOrder: 5 },
+  { id: 7, text: "Valentine's?", rotation: -4, placed: false, correctOrder: 6 },
 ]);
 
 // Shuffle pieces initially
@@ -78,13 +83,31 @@ const shuffleArray = (arr) => {
 
 pieces.value = shuffleArray(pieces.value);
 
+// Track placed pieces in order
+const placedPiecesOrder = ref([]);
+
 // Currently dragging piece
 const draggedPiece = ref(null);
 
 // Computed properties
-const placedPieces = computed(() => pieces.value.filter((p) => p.placed));
+const placedPieces = computed(() => {
+  // Return pieces in the order they were placed
+  return placedPiecesOrder.value.map((id) =>
+    pieces.value.find((p) => p.id === id),
+  );
+});
+
 const availablePieces = computed(() => pieces.value.filter((p) => !p.placed));
-const isSolved = computed(() => pieces.value.every((p) => p.placed));
+
+const isSolved = computed(() => {
+  if (placedPiecesOrder.value.length !== pieces.value.length) return false;
+
+  // Check if pieces are in correct order
+  return placedPiecesOrder.value.every((pieceId, index) => {
+    const piece = pieces.value.find((p) => p.id === pieceId);
+    return piece.correctOrder === index;
+  });
+});
 
 // Watch for puzzle completion
 watch(isSolved, (solved) => {
@@ -103,7 +126,17 @@ const handleDragStart = (piece) => {
 const handleDrop = () => {
   if (draggedPiece.value) {
     draggedPiece.value.placed = true;
+    placedPiecesOrder.value.push(draggedPiece.value.id);
     draggedPiece.value = null;
+  }
+};
+
+// Allow removing pieces (click to remove)
+const removePiece = (piece) => {
+  piece.placed = false;
+  const index = placedPiecesOrder.value.indexOf(piece.id);
+  if (index > -1) {
+    placedPiecesOrder.value.splice(index, 1);
   }
 };
 </script>
